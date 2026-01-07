@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小桃鼠一番賞 - 快請精準誇獎我！</title>
+    <style>
+        :root {
+            --momo-pink: #fce4ec;
+            --momo-deep: #d85d7d;
+            --momo-border: #333333;
+            --momo-blue: #e3f2fd;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', cursive, sans-serif;
+            background-color: #f8bbd0; /* 背景粉紅色 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* 模仿設計圖的手繪圓角卡片 */
+        .card {
+            background: white;
+            width: 420px;
+            border-radius: 40px;
+            border: 3px solid var(--momo-border);
+            padding: 30px;
+            position: relative;
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.05);
+            z-index: 10;
+        }
+
+        /* 頂部頭像與標題 */
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .avatar-container {
+            width: 90px;
+            height: 90px;
+            border: 2px solid var(--momo-border);
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #fff;
+            margin-right: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .avatar-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .title-area h1 {
+            font-size: 22px;
+            color: var(--momo-deep);
+            margin: 0;
+            font-weight: bold;
+        }
+
+        /* 氣泡對話框 */
+        .speech-bubble {
+            background: var(--momo-blue);
+            border: 2px solid var(--momo-border);
+            border-radius: 20px;
+            padding: 10px 15px;
+            position: relative;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 8px;
+            display: inline-block;
+        }
+
+        .speech-bubble::before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            border-width: 0 10px 12px 10px;
+            border-style: solid;
+            border-color: transparent transparent var(--momo-border) transparent;
+        }
+
+        /* 數據區域 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            border: 2px solid var(--momo-border);
+            border-radius: 20px;
+            padding: 12px;
+            background: #fff;
+        }
+
+        .stat-header {
+            font-size: 12px;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            color: #666;
+            display: block;
+        }
+
+        .stat-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 15px;
+        }
+
+        .pill {
+            background: var(--momo-deep);
+            color: white;
+            padding: 2px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        /* 抽獎與歷史區 */
+        .main-action {
+            border: 2px dashed var(--momo-border);
+            border-radius: 25px;
+            padding: 15px;
+            background: #fafafa;
+        }
+
+        .draw-btn {
+            background: linear-gradient(to right, #ec407a, #d81b60);
+            color: white;
+            border: 2px solid var(--momo-border);
+            border-radius: 30px;
+            padding: 12px 0;
+            width: 100%;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 0 var(--momo-border);
+            margin-bottom: 15px;
+        }
+
+        .draw-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 var(--momo-border);
+        }
+
+        #history-box {
+            height: 100px;
+            overflow-y: auto;
+            text-align: left;
+            font-size: 13px;
+            color: #444;
+            padding: 5px;
+        }
+
+        .history-row {
+            border-bottom: 1px solid #eee;
+            padding: 5px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* 背景裝飾 */
+        .bg-heart {
+            position: absolute;
+            font-size: 24px;
+            color: white;
+            opacity: 0.6;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-heart" style="top: 10%; left: 10%;">❤️</div>
+    <div class="bg-heart" style="bottom: 15%; right: 10%;">❤️</div>
+    <div class="bg-heart" style="top: 40%; left: 5%;">❤️</div>
+
+    <div class="card">
+        <div class="header">
+            <div class="avatar-container">
+                <img src="https://chiikawa-info.com/wp-content/uploads/2024/09/DekatsuyoandMOMO.webp" alt="小桃鼠">
+            </div>
+            <div class="title-area">
+                <h1>小誇我！小桃鼠一番賞</h1>
+                <div class="speech-bubble" id="quote">快請精準誇獎我！</div>
+            </div>
+        </div>
+
+        <div style="text-align: center; color: #888; font-size: 13px; margin: -5px 0 10px;">momo-mag</div>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <span class="stat-header">籤筒狀態</span>
+                <div class="stat-content">剩餘 <span id="pool-left">80</span></div>
+                <div class="stat-content" style="margin-top:5px;">#抽數 <span class="pill" id="drawn-num">0</span></div>
+            </div>
+            <div class="stat-box">
+                <span class="stat-header">累積花費</span>
+                <div class="stat-content">單回 1100 JPY</div>
+                <div class="stat-content" style="margin-top:5px;">總計 <span class="pill" id="total-cost">0</span></div>
+            </div>
+        </div>
+
+        <div class="main-action">
+            <button class="draw-btn" onclick="draw()">伸手抽一抽 (1100 JPY)</button>
+            <div id="history-box">
+                <div style="text-align:center; color:#ccc; margin-top:30px;">#歷史紀錄將顯示於此...</div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    let pool = [
+        ...Array(2).fill("A獎 👑 巨大厚實小桃鼠娃娃"),
+        ...Array(3).fill("B獎 💖 軟綿綿抱抱玩偶"),
+        ...Array(10).fill("C獎 ☁️ 誇獎我臉部抱枕"),
+        ...Array(25).fill("D獎 🎒 造型尾巴側背包"),
+        ...Array(40).fill("E獎 ✨ 可愛表情吊飾")
+    ];
+
+    let cost = 0;
+    let count = 0;
+    const quotes = ["快誇我！", "這是我應得的！", "咿呀！", "哼哼～要做就做得到！", "可愛吧？"];
+
+    // 洗牌
+    for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+
+    function draw() {
+        if (pool.length === 0) return;
+
+        const prize = pool.pop();
+        count++;
+        cost += 1100;
+
+        // 更新數據
+        document.getElementById('pool-left').innerText = pool.length;
+        document.getElementById('drawn-num').innerText = count;
+        document.getElementById('total-cost').innerText = cost.toLocaleString();
+        
+        // 更新台詞
+        document.getElementById('quote').innerText = quotes[Math.floor(Math.random() * quotes.length)];
+        
+        // 更新紀錄
+        const hist = document.getElementById('history-box');
+        if (count === 1) hist.innerHTML = "";
+        const entry = document.createElement('div');
+        entry.className = 'history-row';
+        entry.innerHTML = `<span>第 ${count} 抽</span><span style="color:var(--momo-deep); font-weight:bold;">${prize}</span>`;
+        hist.prepend(entry);
+
+        // 完售檢查
+        if (pool.length === 0) {
+            alert("咿呀！抽完囉！恭喜獲得 LAST ONE 獎！");
+            document.querySelector('.draw-btn').innerText = "已完售 (。・ω・。)";
+            document.querySelector('.draw-btn').disabled = true;
+        }
+    }
+</script>
+</body>
+</html>
