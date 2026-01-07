@@ -21,6 +21,17 @@
             min-height: 100vh;
             margin: 0;
             overflow: hidden;
+            position: relative;
+        }
+
+        /* 漂浮背景心心 */
+        .bg-heart {
+            position: absolute;
+            font-size: 24px;
+            color: white;
+            opacity: 0.6;
+            z-index: 1;
+            user-select: none;
         }
 
         /* 模仿設計圖的手繪圓角卡片 */
@@ -113,6 +124,7 @@
             padding-bottom: 4px;
             color: #666;
             display: block;
+            text-align: left;
         }
 
         .stat-content {
@@ -150,11 +162,18 @@
             cursor: pointer;
             box-shadow: 0 5px 0 var(--momo-border);
             margin-bottom: 15px;
+            transition: 0.1s;
         }
 
         .draw-btn:active {
             transform: translateY(3px);
             box-shadow: 0 2px 0 var(--momo-border);
+        }
+
+        .draw-btn:disabled {
+            background: #ccc;
+            box-shadow: none;
+            cursor: not-allowed;
         }
 
         #history-box {
@@ -172,15 +191,6 @@
             display: flex;
             justify-content: space-between;
         }
-
-        /* 背景裝飾 */
-        .bg-heart {
-            position: absolute;
-            font-size: 24px;
-            color: white;
-            opacity: 0.6;
-            z-index: 1;
-        }
     </style>
 </head>
 <body>
@@ -192,7 +202,7 @@
     <div class="card">
         <div class="header">
             <div class="avatar-container">
-                <img src="https://chiikawa-info.com/wp-content/uploads/2024/09/DekatsuyoandMOMO.webp" alt="小桃鼠">
+                <img src="https://chiikawa-info.com/wp-content/uploads/2023/12/dekatsuyoand-momonga.jpg" alt="小桃鼠">
             </div>
             <div class="title-area">
                 <h1>小誇我！小桃鼠一番賞</h1>
@@ -216,7 +226,7 @@
         </div>
 
         <div class="main-action">
-            <button class="draw-btn" onclick="draw()">伸手抽一抽 (1100 JPY)</button>
+            <button class="draw-btn" id="draw-button" onclick="draw()">伸手抽一抽 (1100 JPY)</button>
             <div id="history-box">
                 <div style="text-align:center; color:#ccc; margin-top:30px;">#歷史紀錄將顯示於此...</div>
             </div>
@@ -236,7 +246,7 @@
     let count = 0;
     const quotes = ["快誇我！", "這是我應得的！", "咿呀！", "哼哼～要做就做得到！", "可愛吧？"];
 
-    // 洗牌
+    // 初始洗牌
     for (let i = pool.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [pool[i], pool[j]] = [pool[j], pool[i]];
@@ -268,9 +278,11 @@
         // 完售檢查
         if (pool.length === 0) {
             alert("咿呀！抽完囉！恭喜獲得 LAST ONE 獎！");
-            document.querySelector('.draw-btn').innerText = "已完售 (。・ω・。)";
-            document.querySelector('.draw-btn').disabled = true;
+            const btn = document.getElementById('draw-button');
+            btn.innerText = "已完售 (。・ω・。)";
+            btn.disabled = true;
         }
     }
 </script>
 </body>
+</html>
